@@ -1,22 +1,32 @@
 (ns clojure-snake.core
   (:import (javax.swing JFrame JPanel)))
 
-(def snake [0 1 0 2 0 3 0 4])
+(def snake (atom [[0 1] [0 2] [0 3] [0 4]]))
+(def size 5)
+(def running true)
 
 
-(comment WIP make work lol
-  (defn paintSnake [g snake]
-    (let [size 5]
-      (.fillRect g (* size x) (* y size) size size)))
+(defn moveDown [snake]
+  (conj (subvec snake 1) [(first (last snake)) (+ (second (last snake)) 1)]))
+
+(defn paintSnake [g snake]
+  (doall (for [block snake]
+      (.fillRect g (* size (first block)) (* size (second block)) size size))))
 
 (do
   (let [window (JFrame. "snake!")
         drawable (proxy [JPanel] []
-                     (paintComponent [g]
-                       (paintSnake g snake)))]
+                   (paintComponent [g]
+                     (paintSnake g @snake)))]
 
     (.setSize window 200 200)
     (.add window drawable)
-    (.setVisible window true)))
+    (.setVisible window true)
+
+    (loop []
+        (. Thread sleep 1000)
+        (swap! snake moveDown))
+        (.repaint drawable)
+        (recur))))
 
 
