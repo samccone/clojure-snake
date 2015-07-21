@@ -17,6 +17,7 @@
   (let [window (JFrame. "snake!")
         drawable (proxy [JPanel] []
                    (paintComponent [g]
+                     (proxy-super paintComponent g)
                      (paintSnake g @snake)))]
 
     (.setSize window 200 200)
