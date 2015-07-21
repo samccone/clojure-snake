@@ -26,7 +26,7 @@
 
     (loop []
         (. Thread sleep 1000)
-        (swap! snake moveDown))
+        (swap! snake moveDown)
         (.repaint drawable)
         (recur))))
 
