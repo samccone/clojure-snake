@@ -6,7 +6,7 @@ clojure snake a work in progress
 
 ### Todo
 
-* [ ] Prevent moving ontop of self
+* [x] Prevent moving ontop of self
 * [ ] When the snake moves out of the window bounds, the snake should wrap around
 * [ ] Add apples thatyou can eat
 * [ ] When you eat an apple grow the snake

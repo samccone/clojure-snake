@@ -46,7 +46,7 @@
 
 (defn on-window-close [e] (reset! game-over true))
 
-(defn on-key-press [e] (swap! direction #(case (.getKeyCode e)
+(defn on-key-press [e] (let [new-direction (case (.getKeyCode e)
                           ;left
                           37 "left"
                           ;right
@@ -55,7 +55,14 @@
                           40 "down"
                           ;up
                           38 "up"
-                          %)))
+                          @direction)]
+
+                          (if-not (or
+                                (and (= "right" @direction) (= "left" new-direction))
+                                (and (= "right" new-direction) (= "left" @direction))
+                                (and (= "up" new-direction) (= "down" @direction))
+                                (and (= "up" @direction) (= "down" new-direction)))
+                              (reset! direction new-direction))))
 
 (defn game []
   (let [window (proxy [JFrame] ["snake!"])
