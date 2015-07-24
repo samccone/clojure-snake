@@ -30,6 +30,4 @@
     (.add window drawable)
     (.setVisible window true)
 
-    (when (not @game-over)
-      (println "tick")
-      (tick drawable))))
+    (future (loop [] (Thread/sleep 200) (tick drawable) (when (not @game-over) (recur))))))
