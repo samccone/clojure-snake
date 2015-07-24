@@ -4,21 +4,46 @@
 
 (def snake (atom [[0 1] [0 2] [0 3] [0 4]]))
 (def size 5)
+(def direction (atom "down"))
 (def game-over (atom false))
 
+(defn remove-tail [snake] (subvec snake 1))
+
 (defn move-down [snake]
-  (conj (subvec snake 1) [(first (last snake)) (+ (second (last snake)) 1)]))
+  (conj snake [(first (last snake)) (+ (second (last snake)) 1)]))
+
+(defn move-left [snake] snake)
+(defn move-right [snake] snake)
+(defn move-up [snake] snake)
 
 (defn paint-snake [g snake]
   (doall (for [block snake]
       (.fillRect g (* size (first block)) (* size (second block)) size size))))
 
-(defn tick [drawable]
-  (swap! snake move-down)
+(defn move-direction [direction snake]
+  (println direction)
+  (case direction
+    "left" (move-left snake)
+    "right" (move-right snake)
+    "down" (move-down snake)
+    "up" (move-up snake)))
+
+(defn tick [drawable direction snake]
+  (swap! snake #(remove-tail (move-direction direction %)))
   (.repaint drawable))
 
-(defn on-window-close [e] (swap! game-over (fn [v] true)))
-(defn on-key-press [e] (println (.getKeyChar e)))
+(defn on-window-close [e] (reset! game-over true))
+
+(defn on-key-press [e] (swap! direction #(case (.getKeyCode e)
+                          ;left
+                          37 "left"
+                          ;right
+                          39 "right"
+                          ;down
+                          40 "down"
+                          ;up
+                          38 "up"
+                          %)))
 
 (defn game []
   (let [window (proxy [JFrame] ["snake!"])
@@ -32,10 +57,17 @@
                                  (windowOpened [e])
                                  (windowActivated [e])
                                  (windowClosing [e] (on-window-close e))))
-    (.addKeyListener window (proxy [KeyListener] [] (keyPresses [e] (on-key-press e))))
+    (.addKeyListener window (proxy [KeyListener] []
+                              (keyReleased [e])
+                              (keyTyped [e])
+                              (keyPressed [e] (on-key-press e))))
+
     (.setFocusable window true)
     (.setSize window 200 200)
     (.add window drawable)
     (.setVisible window true)
 
-    (future (loop [] (Thread/sleep 200) (tick drawable) (when (not @game-over) (recur))))))
+    (future (loop []
+              (Thread/sleep 200)
+              (tick drawable @direction snake)
+              (when (not @game-over) (recur))))))
