@@ -10,18 +10,22 @@
 (defn remove-tail [snake] (subvec snake 1))
 
 (defn move-down [snake]
-  (conj snake [(first (last snake)) (+ (second (last snake)) 1)]))
+  (conj snake [(first (last snake)) (inc (second (last snake)))]))
 
-(defn move-left [snake] snake)
-(defn move-right [snake] snake)
-(defn move-up [snake] snake)
+(defn move-left [snake]
+  (conj snake [(dec (first (last snake))) (second (last snake))]))
+
+(defn move-right [snake]
+  (conj snake [(inc (first (last snake))) (second (last snake))]))
+
+(defn move-up [snake]
+  (conj snake [(first (last snake)) (dec (second (last snake)))]))
 
 (defn paint-snake [g snake]
   (doall (for [block snake]
       (.fillRect g (* size (first block)) (* size (second block)) size size))))
 
 (defn move-direction [direction snake]
-  (println direction)
   (case direction
     "left" (move-left snake)
     "right" (move-right snake)
