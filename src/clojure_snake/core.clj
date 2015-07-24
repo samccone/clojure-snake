@@ -4,17 +4,17 @@
 
 (def snake (atom [[0 1] [0 2] [0 3] [0 4]]))
 (def size 5)
-(def gameOver (atom false))
+(def game-over (atom false))
 
-(defn moveDown [snake]
+(defn move-down [snake]
   (conj (subvec snake 1) [(first (last snake)) (+ (second (last snake)) 1)]))
 
-(defn paintSnake [g snake]
+(defn paint-snake [g snake]
   (doall (for [block snake]
       (.fillRect g (* size (first block)) (* size (second block)) size size))))
 
 (defn tick [drawable]
-  (swap! snake moveDown)
+  (swap! snake move-down)
   (.repaint drawable))
 
 (defn game []
@@ -22,17 +22,14 @@
         drawable (proxy [JPanel] []
                    (paintComponent [g]
                      (proxy-super paintComponent g)
-                     (paintSnake g @snake)))]
+                     (paint-snake g @snake)))]
 
     (.addWindowListener window (proxy [WindowListener] []
-                          (windowClosing [e] (println "all done") (swap! gameOver (fn [v] false)))))
+                                 (windowClosing [e] (println "all done") (swap! game-over (fn [v] true)))))
     (.setSize window 200 200)
     (.add window drawable)
     (.setVisible window true)
 
-    (loop []
-      (when (not @gameOver)
-        (println "tick")
-        (. Thread sleep 1000)
-        (tick drawable)
-        (recur)))))
+    (when (not @game-over)
+      (println "tick")
+      (tick drawable))))
