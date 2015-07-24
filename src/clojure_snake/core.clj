@@ -69,6 +69,7 @@
 
       (.setFocusable true)
       (.setSize 200 200)
+      (.setResizable false)
       (.add drawable)
       (.setVisible true))
 
