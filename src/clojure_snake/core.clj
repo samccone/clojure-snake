@@ -56,20 +56,21 @@
                      (proxy-super paintComponent g)
                      (paint-snake g @snake)))]
 
-    (.addWindowListener window (proxy [WindowListener] []
-                                 (windowDeactivated [e])
-                                 (windowOpened [e])
-                                 (windowActivated [e])
-                                 (windowClosing [e] (on-window-close e))))
-    (.addKeyListener window (proxy [KeyListener] []
-                              (keyReleased [e])
-                              (keyTyped [e])
-                              (keyPressed [e] (on-key-press e))))
+    (doto window
+      (.addWindowListener (proxy [WindowListener] []
+                                   (windowDeactivated [e])
+                                   (windowOpened [e])
+                                   (windowActivated [e])
+                                   (windowClosing [e] (on-window-close e))))
+      (.addKeyListener (proxy [KeyListener] []
+                                (keyReleased [e])
+                                (keyTyped [e])
+                                (keyPressed [e] (on-key-press e))))
 
-    (.setFocusable window true)
-    (.setSize window 200 200)
-    (.add window drawable)
-    (.setVisible window true)
+      (.setFocusable true)
+      (.setSize 200 200)
+      (.add drawable)
+      (.setVisible true))
 
     (future (loop []
               (Thread/sleep 200)
