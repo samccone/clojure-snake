@@ -5,6 +5,7 @@
 
 (def snake (atom [[0 1] [0 2] [0 3] [0 4]]))
 (def apples (atom [[10 3] [20 14] [35 29] [1 20]]))
+(def dimensions [200 200])
 (def size 5)
 (def direction (atom "down"))
 (def game-over (atom false))
@@ -15,7 +16,11 @@
   (conj snake [(first (last snake)) (inc (second (last snake)))]))
 
 (defn move-left [snake]
-  (conj snake [(dec (first (last snake))) (second (last snake))]))
+  (conj snake [
+               (if (< 0 (dec (first (last snake))))
+                 (+ (/ (first dimensions) size) (dec (first (last snake))))
+                 (dec (first (last snake))))
+               (second (last snake))]))
 
 (defn move-right [snake]
   (conj snake [(inc (first (last snake))) (second (last snake))]))
@@ -84,7 +89,7 @@
                                 (keyPressed [e] (on-key-press e))))
 
       (.setFocusable true)
-      (.setSize 200 200)
+      (.setSize (first dimensions) (second dimensions))
       (.setResizable false)
       (.add drawable)
       (.setVisible true))
