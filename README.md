@@ -7,11 +7,11 @@ clojure snake a work in progress
 
 ### Dev
 
-  $ lein repl
-  $ (require 'clojure-snake.core)
-  $ (clojure-snake.core/game)
+    $ lein repl
+    $ (require 'clojure-snake.core)
+    $ (clojure-snake.core/game)
 
 When you make a file change run to reload
 
-  $ (require 'clojure-snake.core :reload-all)
+    $ (require 'clojure-snake.core :reload-all)
 
