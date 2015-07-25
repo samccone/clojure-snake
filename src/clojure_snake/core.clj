@@ -18,6 +18,13 @@
       (swap! apples #(filterv (fn [a] (not= (last snake) a)) %))
       (swap! snake-belly #(+ 5 %)))))
 
+(defn metabolize [snake]
+  (if (> @snake-belly 0)
+  (do
+    (swap! snake-belly #(- % 1))
+    snake)
+  (remove-tail snake)))
+
 (defn move-down [snake]
   (conj snake [(first (last snake)) (inc (second (last snake)))]))
 
@@ -48,7 +55,7 @@
     "up" (move-up snake)))
 
 (defn tick [drawable direction snake]
-  (swap! snake #(remove-tail (move-direction direction %)))
+  (swap! snake #(metabolize (move-direction direction %)))
   (eat @snake snake-belly apples)
   (.repaint drawable))
 

@@ -9,7 +9,7 @@ clojure snake a work in progress
 * [x] Prevent moving ontop of self
 * [ ] When the snake moves out of the window bounds, the snake should wrap around
 * [x] Add apples that you can eat
-* [ ] When you eat an apple grow the snake
+* [x] When you eat an apple grow the snake
 * [ ] When you eat an apple lay down another apple
 * [ ] Slowly increase speed
 * [ ] End the game when the snake runs into itself
