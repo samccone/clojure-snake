@@ -8,7 +8,7 @@ clojure snake a work in progress
 
 * [x] Prevent moving ontop of self
 * [ ] When the snake moves out of the window bounds, the snake should wrap around
-* [ ] Add apples thatyou can eat
+* [x] Add apples that you can eat
 * [ ] When you eat an apple grow the snake
 * [ ] When you eat an apple lay down another apple
 * [ ] Slowly increase speed
@@ -24,4 +24,3 @@ clojure snake a work in progress
 When you make a file change run to reload
 
     $ (require 'clojure-snake.core :reload-all)
-

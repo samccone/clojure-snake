@@ -4,12 +4,19 @@
            (java.awt Color)))
 
 (def snake (atom [[0 1] [0 2] [0 3] [0 4]]))
+(def snake-belly (atom 0))
 (def apples (atom [[10 3] [20 14] [35 29] [1 20]]))
 (def size 5)
 (def direction (atom "down"))
 (def game-over (atom false))
 
 (defn remove-tail [snake] (subvec snake 1))
+
+(defn eat [snake snake-belly apples]
+  (if-not (nil? (some #{(last snake)} @apples))
+    (do
+      (swap! apples #(filterv (fn [a] (not= (last snake) a)) %))
+      (swap! snake-belly #(+ 5 %)))))
 
 (defn move-down [snake]
   (conj snake [(first (last snake)) (inc (second (last snake)))]))
@@ -42,6 +49,7 @@
 
 (defn tick [drawable direction snake]
   (swap! snake #(remove-tail (move-direction direction %)))
+  (eat @snake snake-belly apples)
   (.repaint drawable))
 
 (defn on-window-close [e] (reset! game-over true))
