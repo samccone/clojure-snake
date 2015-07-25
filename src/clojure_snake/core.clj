@@ -7,16 +7,21 @@
 (def snake-belly (atom 0))
 (def apples (atom [[10 3] [20 14] [35 29] [1 20]]))
 (def size 5)
+(def world-size 40)
 (def direction (atom "down"))
 (def game-over (atom false))
 
 (defn remove-tail [snake] (subvec snake 1))
 
+(defn drop-apple [apples]
+  (swap! apples #(conj % [(rand-int (- world-size 1)) (rand-int (- world-size 1))])))
+
 (defn eat [snake snake-belly apples]
   (if-not (nil? (some #{(last snake)} @apples))
     (do
       (swap! apples #(filterv (fn [a] (not= (last snake) a)) %))
-      (swap! snake-belly #(+ 5 %)))))
+      (swap! snake-belly #(+ 5 %))
+      (drop-apple apples))))
 
 (defn metabolize [snake]
   (if (> @snake-belly 0)
@@ -99,7 +104,7 @@
                                 (keyPressed [e] (on-key-press e))))
 
       (.setFocusable true)
-      (.setSize 200 200)
+      (.setSize (* size world-size) (* size world-size))
       (.setResizable false)
       (.add drawable)
       (.setVisible true))
