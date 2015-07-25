@@ -14,6 +14,7 @@ clojure snake a work in progress
 * [ ] Slowly increase speed
 * [ ] End the game when the snake runs into itself
 * [ ] Allow a user to restart the game
+* [ ] Apples should not be placed on top of other apples or on top of the snake
 
 ### Dev
 
