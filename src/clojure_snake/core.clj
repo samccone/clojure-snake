@@ -1,15 +1,13 @@
 (ns clojure-snake.core
   (:import (javax.swing JFrame JPanel)
            (java.awt.event WindowListener KeyListener)
-           (java.awt Color)))
+           (java.awt Color Dimension)))
 
 (def snake (atom [[0 1] [0 2] [0 3] [0 4]]))
 (def snake-belly (atom 0))
-(def apples (atom [[10 3] [20 14] [35 29] [1 20]]))
+(def apples (atom [[10 3] [20 14] [39 39] [1 20]]))
 (def size 5)
 (def world-size 40)
-(def max-y (- world-size 4))
-(def max-x world-size)
 (def direction (atom "down"))
 (def game-over (atom false))
 
@@ -23,7 +21,7 @@
     (do
       (swap! apples #(filterv (fn [a] (not= (last snake) a)) %))
       (swap! snake-belly #(+ 5 %))
-      (swap! apples #(drop-apple % max-x max-y)))))
+      (swap! apples #(drop-apple % world-size world-size)))))
 
 (defn metabolize [snake]
   (if (> @snake-belly 0)
@@ -93,7 +91,7 @@
                      (proxy-super paintComponent g)
                      (paint-snake g @snake)
                      (paint-apples g @apples)))]
-
+    (.setPreferredSize drawable (Dimension. (* size world-size) (* size world-size)))
     (doto window
       (.addWindowListener (proxy [WindowListener] []
                                    (windowDeactivated [e])
@@ -104,11 +102,10 @@
                                 (keyReleased [e])
                                 (keyTyped [e])
                                 (keyPressed [e] (on-key-press e))))
-
       (.setFocusable true)
-      (.setSize (* size world-size) (* size world-size))
       (.setResizable false)
       (.add drawable)
+      (.pack)
       (.setVisible true))
 
     (future (loop []
