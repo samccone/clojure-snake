@@ -31,16 +31,16 @@
   (remove-tail snake)))
 
 (defn move-down [snake]
-  (conj snake [(first (last snake)) (inc (second (last snake)))]))
+  (conj snake [(first (last snake)) (mod (inc (second (last snake))) world-size)]))
 
 (defn move-left [snake]
-  (conj snake [(dec (first (last snake))) (second (last snake))]))
+  (conj snake [(mod (dec (first (last snake))) world-size) (second (last snake))]))
 
 (defn move-right [snake]
-  (conj snake [(inc (first (last snake))) (second (last snake))]))
+  (conj snake [(mod (inc (first (last snake))) world-size) (second (last snake))]))
 
 (defn move-up [snake]
-  (conj snake [(first (last snake)) (dec (second (last snake)))]))
+  (conj snake [(first (last snake)) (mod (dec (second (last snake))) world-size)]))
 
 (defn paint-snake [g snake]
   (.setColor g Color/black)
