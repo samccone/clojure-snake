@@ -1,11 +1,11 @@
 (ns clojure-snake.core
   (:import (javax.swing JFrame JPanel)
            (java.awt.event WindowListener KeyListener)
-           (java.awt Color)))
+           (java.awt Color Dimension)))
 
 (def snake (atom [[0 1] [0 2] [0 3] [0 4]]))
 (def snake-belly (atom 0))
-(def apples (atom [[10 3] [20 14] [35 29] [1 20]]))
+(def apples (atom [[10 3] [20 14] [39 39] [1 20]]))
 (def size 5)
 (def world-size 40)
 (def direction (atom "down"))
@@ -13,15 +13,15 @@
 
 (defn remove-tail [snake] (subvec snake 1))
 
-(defn drop-apple [apples]
-  (swap! apples #(conj % [(rand-int (- world-size 1)) (rand-int (- world-size 1))])))
+(defn drop-apple [apples max-x max-y]
+  (conj apples [(rand-int max-x) (rand-int max-y)]))
 
 (defn eat [snake snake-belly apples]
   (if-not (nil? (some #{(last snake)} @apples))
     (do
       (swap! apples #(filterv (fn [a] (not= (last snake) a)) %))
       (swap! snake-belly #(+ 5 %))
-      (drop-apple apples))))
+      (swap! apples #(drop-apple % world-size world-size)))))
 
 (defn metabolize [snake]
   (if (> @snake-belly 0)
@@ -31,16 +31,16 @@
   (remove-tail snake)))
 
 (defn move-down [snake]
-  (conj snake [(first (last snake)) (inc (second (last snake)))]))
+  (conj snake [(first (last snake)) (mod (inc (second (last snake))) world-size)]))
 
 (defn move-left [snake]
-  (conj snake [(dec (first (last snake))) (second (last snake))]))
+  (conj snake [(mod (dec (first (last snake))) world-size) (second (last snake))]))
 
 (defn move-right [snake]
-  (conj snake [(inc (first (last snake))) (second (last snake))]))
+  (conj snake [(mod (inc (first (last snake))) world-size) (second (last snake))]))
 
 (defn move-up [snake]
-  (conj snake [(first (last snake)) (dec (second (last snake)))]))
+  (conj snake [(first (last snake)) (mod (dec (second (last snake))) world-size)]))
 
 (defn paint-snake [g snake]
   (.setColor g Color/black)
@@ -91,7 +91,7 @@
                      (proxy-super paintComponent g)
                      (paint-snake g @snake)
                      (paint-apples g @apples)))]
-
+    (.setPreferredSize drawable (Dimension. (* size world-size) (* size world-size)))
     (doto window
       (.addWindowListener (proxy [WindowListener] []
                                    (windowDeactivated [e])
@@ -102,11 +102,10 @@
                                 (keyReleased [e])
                                 (keyTyped [e])
                                 (keyPressed [e] (on-key-press e))))
-
       (.setFocusable true)
-      (.setSize (* size world-size) (* size world-size))
       (.setResizable false)
       (.add drawable)
+      (.pack)
       (.setVisible true))
 
     (future (loop []
