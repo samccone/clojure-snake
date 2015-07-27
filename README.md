@@ -15,6 +15,10 @@ clojure snake a work in progress
 * [ ] End the game when the snake runs into itself
 * [ ] Allow a user to restart the game
 * [ ] Apples should not be placed on top of other apples or on top of the snake
+* [ ] Add a start screen
+* [ ] Add an autoplay mode
+* [ ] Add an optional computer AI mode
+* [ ] Add a difficulity slider (1 - 10) determines growth and speed
 
 ### Dev
 
