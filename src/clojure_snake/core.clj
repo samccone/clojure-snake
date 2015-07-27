@@ -66,12 +66,14 @@
     "down" (move-down snake)
     "up" (move-up snake)))
 
+(defn end-game [] (reset! game-over true))
+
 (defn tick [drawable direction snake]
   (swap! snake #(metabolize (move-direction direction %)))
   (eat @snake snake-belly apples)
   (.repaint drawable))
 
-(defn on-window-close [e] (reset! game-over true))
+(defn on-window-close [e] (end-game))
 
 (defn on-key-press [e] (let [new-direction (case (.getKeyCode e)
                           ;left
