@@ -13,6 +13,7 @@ clojure snake a work in progress
 * [x] When you eat an apple lay down another apple
 * [ ] Slowly increase speed
 * [x] End the game when the snake runs into itself
+* [ ] Add score to title bar ... `score = (.2 * time-alive * apples eaten)`
 * [ ] Allow a user to restart the game
 * [ ] Apples should not be placed on top of other apples or on top of the snake
 * [ ] Add a start screen
