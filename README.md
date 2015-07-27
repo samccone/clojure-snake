@@ -12,7 +12,7 @@ clojure snake a work in progress
 * [x] When you eat an apple grow the snake
 * [x] When you eat an apple lay down another apple
 * [ ] Slowly increase speed
-* [ ] End the game when the snake runs into itself
+* [x] End the game when the snake runs into itself
 * [ ] Allow a user to restart the game
 * [ ] Apples should not be placed on top of other apples or on top of the snake
 * [ ] Add a start screen

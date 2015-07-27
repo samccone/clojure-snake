@@ -69,9 +69,11 @@
 (defn end-game [] (reset! game-over true))
 
 (defn tick [drawable direction snake]
-  (swap! snake #(metabolize (move-direction direction %)))
-  (eat @snake snake-belly apples)
-  (.repaint drawable))
+  (let [new-snake (metabolize (move-direction direction @snake))]
+    (if (in-vector? @snake (last new-snake)) (end-game))
+    (reset! snake new-snake)
+    (eat @snake snake-belly apples)
+    (.repaint drawable)))
 
 (defn on-window-close [e] (end-game))
 
