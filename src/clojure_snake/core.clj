@@ -23,6 +23,13 @@
       (swap! snake-belly #(+ 5 %))
       (swap! apples #(drop-apple % world-size world-size)))))
 
+(defn in-vector? [coords match]
+  (if (empty? coords)
+    false
+    (if (= (last coords) match)
+      true
+      (recur (pop coords) match))))
+
 (defn metabolize [snake]
   (if (> @snake-belly 0)
   (do
