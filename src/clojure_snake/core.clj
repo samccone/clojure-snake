@@ -90,6 +90,9 @@
                                 (and (= "up" @direction) (= "down" new-direction)))
                               (reset! direction new-direction))))
 
+(defn get-speed [snake]
+  (max 32 (- 200 (* (count snake) 2)))
+
 (defn game []
   (let [window (proxy [JFrame] ["snake!"])
         drawable (proxy [JPanel] []
@@ -115,6 +118,6 @@
       (.setVisible true))
 
     (future (loop []
-              (Thread/sleep 200)
+              (Thread/sleep (get-speed @snake))
               (tick drawable @direction snake)
               (when (not @game-over) (recur))))))
