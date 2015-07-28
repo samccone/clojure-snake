@@ -20,6 +20,7 @@ clojure snake a work in progress
 * [ ] Add an autoplay mode
 * [ ] Add an optional computer AI mode
 * [ ] Add a difficulity slider (1 - 10) determines growth and speed
+* [ ] Use left and right arrows to steer snake in continuous angles
 
 ### Dev
 
