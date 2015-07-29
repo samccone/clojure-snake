@@ -5,7 +5,7 @@
 
 (def snake (atom [[0 1] [0 2] [0 3] [0 4]]))
 (def snake-belly (atom 0))
-(def apples (atom [[10 3] [20 14] [39 39] [1 20]]))
+(def apples (atom #{[10 3] [20 14] [39 39] [1 20]}))
 (def size 5)
 (def world-size 40)
 (def direction (atom "down"))
@@ -44,15 +44,12 @@
 (defn move-up [snake]
   (conj snake [(first (last snake)) (mod (dec (second (last snake))) world-size)]))
 
-(defn paint-snake [g snake]
-  (.setColor g Color/black)
-  (doall (for [block snake]
-      (.fillRect g (* size (first block)) (* size (second block)) size size))))
-
-(defn paint-apples [g apples]
-  (.setColor g Color/red)
-  (doall (for [block apples]
-      (.fillRect g (* size (first block)) (* size (second block)) size size))))
+(defn paint-blocks
+  ([g blocks] (paint-blocks g blocks Color/black))
+  ([g blocks color]
+    (.setColor g color)
+    (doall (for [block blocks]
+      (.fillRect g (* size (first block)) (* size (second block)) size size)))))
 
 (defn move-direction [direction snake]
   (case direction
@@ -98,8 +95,8 @@
         drawable (proxy [JPanel] []
                    (paintComponent [g]
                      (proxy-super paintComponent g)
-                     (paint-snake g @snake)
-                     (paint-apples g @apples)))]
+                     (paint-blocks g @snake)
+                     (paint-blocks g @apples Color/red)))]
     (.setPreferredSize drawable (Dimension. (* size world-size) (* size world-size)))
     (doto window
       (.addWindowListener (proxy [WindowListener] []
