@@ -91,7 +91,7 @@
                               (reset! direction new-direction))))
 
 (defn get-speed [snake]
-  (max 32 (- 200 (* (count snake) 2)))
+  (max 32 (- 200 (* (count snake) 2))))
 
 (defn game []
   (let [window (proxy [JFrame] ["snake!"])
