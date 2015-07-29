@@ -5,7 +5,7 @@
 
 (def snake (atom [[0 1] [0 2] [0 3] [0 4]]))
 (def snake-belly (atom 0))
-(def apples (atom [[10 3] [20 14] [39 39] [1 20]]))
+(def apples (atom #{[10 3] [20 14] [39 39] [1 20]}))
 (def size 5)
 (def world-size 40)
 (def direction (atom "down"))
